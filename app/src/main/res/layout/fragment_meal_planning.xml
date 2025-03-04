@@ -1,15 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:orientation="vertical"
     android:padding="16dp">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <ImageView
+        android:id="@+id/meal_image"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:background="@android:color/darker_gray"
+        android:scaleType="centerCrop"
+        android:contentDescription="Meal Image" />
+
+    <EditText
+        android:id="@+id/meal_name"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/black"
-        android:text="Welcome to the Meal Planning Screen!"
-        android:textSize="24sp" />
+        android:textColorHint="@android:color/darker_gray"
+        android:hint="Meal Name"
+        android:inputType="text" />
 
-</RelativeLayout>
+    <EditText
+        android:id="@+id/meal_instructions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:textColorHint="@android:color/darker_gray"
+        android:hint="Instructions"
+        android:inputType="textMultiLine"
+        android:lines="3"
+        android:maxLines="5" />
+
+    <EditText
+        android:id="@+id/meal_ingredients"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:textColorHint="@android:color/darker_gray"
+        android:hint="Ingredients"
+        android:inputType="textMultiLine"
+        android:lines="3"
+        android:maxLines="5" />
+
+    <Button
+        android:id="@+id/save_meal_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Save Meal"
+        android:layout_gravity="center" />
+
+</LinearLayout>
