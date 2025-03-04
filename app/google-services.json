@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1022464147020",
+    "project_id": "hamro-login",
+    "storage_bucket": "hamro-login.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1022464147020:android:25b432fc70c00fd21efee9",
+        "android_client_info": {
+          "package_name": "com.example.kamalapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBZKjlp43331vZ6HmrssBUeqY9vZc9gQeo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
