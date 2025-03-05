@@ -1,4 +1,4 @@
-package com.example.kamalapp;
+package com.example.kamalapp.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,8 +12,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.kamalapp.MainActivity;
-import com.example.kamalapp.RegistrationActivity;
+import com.example.kamalapp.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;

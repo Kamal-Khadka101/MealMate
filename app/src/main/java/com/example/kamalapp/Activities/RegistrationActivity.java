@@ -1,4 +1,4 @@
-package com.example.kamalapp;
+package com.example.kamalapp.Activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -11,6 +11,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.kamalapp.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -31,7 +32,7 @@ public class RegistrationActivity extends AppCompatActivity {
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser != null){
-            Intent intent= new Intent(getApplicationContext(),LoginActivity.class );
+            Intent intent= new Intent(getApplicationContext(), LoginActivity.class );
             startActivity(intent);
             finish();
         }

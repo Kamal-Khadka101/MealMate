@@ -1,8 +1,10 @@
-package com.example.kamalapp;
+package com.example.kamalapp.Activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.kamalapp.R;
 
 public class SplashActivity extends AppCompatActivity {
 

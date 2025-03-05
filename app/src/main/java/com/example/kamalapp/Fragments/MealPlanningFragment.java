@@ -1,4 +1,4 @@
-package com.example.kamalapp;
+package com.example.kamalapp.Fragments;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -16,6 +16,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.kamalapp.Models.MealViewModel;
+import com.example.kamalapp.R;
 import com.example.kamalapp.data.Meal;
 
 public class MealPlanningFragment extends Fragment {

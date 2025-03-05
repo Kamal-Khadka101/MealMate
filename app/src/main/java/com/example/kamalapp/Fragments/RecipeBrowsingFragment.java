@@ -1,9 +1,11 @@
-package com.example.kamalapp;
+package com.example.kamalapp.Fragments;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.fragment.app.Fragment;
+
+import com.example.kamalapp.R;
 
 public class RecipeBrowsingFragment extends Fragment {
     @Override

@@ -1,16 +1,20 @@
-package com.example.kamalapp;
+package com.example.kamalapp.Activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-import com.example.kamalapp.R;
-import android.view.View;
-import android.widget.Button;
+
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+
+import com.example.kamalapp.Fragments.GroceryListFragment;
+import com.example.kamalapp.Fragments.HomeFragment;
+import com.example.kamalapp.Fragments.MealPlanningFragment;
+import com.example.kamalapp.Fragments.RecipeBrowsingFragment;
+import com.example.kamalapp.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {

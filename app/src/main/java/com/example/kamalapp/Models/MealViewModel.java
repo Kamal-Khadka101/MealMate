@@ -1,10 +1,9 @@
-package com.example.kamalapp;
+package com.example.kamalapp.Models;
 
 import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 
 import com.example.kamalapp.data.Meal;
 import com.example.kamalapp.data.MealDatabase;
@@ -18,7 +17,7 @@ public class MealViewModel extends AndroidViewModel {
     public MealViewModel(@NonNull Application application) {
         super(application);
         database = MealDatabase.getInstance(application);
-        allMeals = database.mealDao().getAllMeals(); // Assuming you have a LiveData version of this method
+        allMeals = database.mealDao().getAllMeals(); // This should now work correctly
     }
 
     public void insert(Meal meal) {
