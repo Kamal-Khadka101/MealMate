@@ -1,6 +1,7 @@
 // Fragments/RecipeDetailFragment.java
 package com.example.kamalapp.Fragments;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -102,7 +103,7 @@ public class RecipeDetailFragment extends Fragment {
 
         // Load image with Glide
         Glide.with(this)
-                .load(new File(meal.getImagePath()))
+                .load(Uri.parse(meal.getImagePath()))
                 .centerCrop()
                 .into(recipeImageView);
     }

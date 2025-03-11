@@ -1,0 +1,9 @@
+<resources>
+    <!-- Other styles -->
+
+    <style name="CustomSearchView" parent="Widget.AppCompat.SearchView">
+        <item name="queryHint">@string/search_recipes</item>
+        <item name="android:textColorHint">@color/black</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+</resources>
