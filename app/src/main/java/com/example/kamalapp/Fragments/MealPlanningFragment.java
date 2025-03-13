@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -23,6 +24,7 @@ import com.bumptech.glide.Glide;
 import com.example.kamalapp.data.Meal;
 import com.example.kamalapp.Models.MealViewModel;
 import com.example.kamalapp.R;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,6 +36,7 @@ public class MealPlanningFragment extends Fragment {
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_PICK_IMAGE = 2;
+    private BottomNavigationView bottomNavigationView;
 
     private MealViewModel mealViewModel;
     private EditText nameEditText, ingredientsEditText, instructionsEditText;
@@ -90,6 +93,7 @@ public class MealPlanningFragment extends Fragment {
 
         Toast.makeText(getContext(), "Recipe saved successfully!", Toast.LENGTH_SHORT).show();
 
+
         // Clear fields after saving
         nameEditText.setText("");
         ingredientsEditText.setText("");
@@ -97,11 +101,10 @@ public class MealPlanningFragment extends Fragment {
         recipeImageView.setImageResource(R.drawable.ic_placeholder);
         currentPhotoPath = null;
 
-        // Navigate to the recipe browsing fragment
-        requireActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, new RecipeBrowsingFragment())
-                .addToBackStack(null)  // Allow back navigation
-                .commit();
+        // Get the bottom navigation view from activity
+        BottomNavigationView bottomNavigationView = requireActivity().findViewById(R.id.bottom_navigation);
+        // Set the selected item to recipes
+        bottomNavigationView.setSelectedItemId(R.id.nav_recipes);
     }
 
     private void dispatchTakePictureIntent() {

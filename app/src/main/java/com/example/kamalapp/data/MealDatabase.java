@@ -10,10 +10,11 @@ import androidx.room.RoomDatabase;
 import com.example.kamalapp.data.MealDao;
 import com.example.kamalapp.data.Meal;
 
-@Database(entities = {Meal.class}, version = 1, exportSchema = false)
+@Database(entities = {Meal.class, GroceryItem.class}, version = 2, exportSchema = false)
 public abstract class MealDatabase extends RoomDatabase {
 
     public abstract MealDao mealDao();
+    public abstract GroceryDao groceryDao();
 
     private static volatile MealDatabase INSTANCE;
 

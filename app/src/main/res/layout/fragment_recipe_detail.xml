@@ -3,113 +3,98 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".Fragments.RecipeDetailFragment">
+    android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:padding="16dp">
 
         <ImageView
             android:id="@+id/detail_recipe_image"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="200dp"
             android:scaleType="centerCrop"
-            android:contentDescription="@string/recipe_image"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            android:contentDescription="Recipe Image"
             tools:src="@tools:sample/backgrounds/scenic" />
 
         <TextView
             android:id="@+id/detail_recipe_name"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:textSize="24sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/detail_recipe_image"
             android:textColor="@color/black"
             tools:text="Recipe Name" />
 
         <TextView
-            android:id="@+id/ingredients_label"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="@string/ingredients"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:text="Ingredients"
             android:textColor="@color/black"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/detail_recipe_name" />
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/detail_recipe_ingredients"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="parent"
             android:textColor="@color/black"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ingredients_label"
-            tools:text="Ingredients list" />
+            tools:text="Ingredient 1\nIngredient 2\nIngredient 3" />
 
         <TextView
-            android:id="@+id/instructions_label"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
             android:layout_marginTop="16dp"
-            android:text="@string/instructions"
+            android:text="Instructions"
+            android:textColor="@color/black"
             android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/detail_recipe_ingredients" />
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/detail_recipe_instructions"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             android:textColor="@color/black"
-            app:layout_constraintTop_toBottomOf="@+id/instructions_label"
-            tools:text="Instructions details" />
+            tools:text="Step 1. Do this\nStep 2. Do that\nStep 3. Finish cooking" />
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
             android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/detail_recipe_instructions">
+            android:layout_marginTop="24dp">
 
             <Button
                 android:id="@+id/button_edit"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
                 android:layout_weight="1"
-                android:text="@string/edit_recipe" />
+                android:layout_marginEnd="8dp"
+                android:text="Edit" />
 
             <Button
                 android:id="@+id/button_add_to_grocery"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
                 android:layout_weight="1"
-                android:text="@string/add_to_grocery" />
+                android:layout_marginStart="8dp"
+                android:text="Add to Grocery" />
         </LinearLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <Button
+            android:id="@+id/button_delete"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="#F44336"
+            android:text="Delete Recipe"
+            app:icon="@drawable/ic_delete"
+            app:iconTint="#FFFFFF" />
+
+    </LinearLayout>
 </ScrollView>

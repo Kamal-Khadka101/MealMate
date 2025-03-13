@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.example.kamalapp.Adapters.MealAdapter;
 import com.example.kamalapp.Models.MealViewModel;
@@ -66,10 +67,10 @@ public class RecipeBrowsingFragment extends Fragment {
         FloatingActionButton fab = view.findViewById(R.id.fab_add_recipe);
         fab.setOnClickListener(v -> {
             // Navigate to Meal Planning Fragment
-            requireActivity().getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, new MealPlanningFragment())
-                    .addToBackStack(null)
-                    .commit();
+            // Get the bottom navigation view from activity
+            BottomNavigationView bottomNavigationView = requireActivity().findViewById(R.id.bottom_navigation);
+            // Set the selected item to recipes
+            bottomNavigationView.setSelectedItemId(R.id.nav_meal_planning);
         });
 
         return view;
