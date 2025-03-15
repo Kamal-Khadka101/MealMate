@@ -2,7 +2,11 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="holo_blue_light">#33b5e5</color>
+    <color name="holo_blue_light">#a88de6</color>
     <color name="danger_red">#F32013</color>
+    <color name="card_color">#ffe7c3</color>
+    <color name="soft_cream">#fff1dc</color>
+    <color name="buttons">#ffb497</color>
+    <color name="green_card">#d0e5d8</color>
     <color name="fab_accent_color">#FF7043</color> <!-- Vibrant Coral -->
 </resources>

@@ -8,7 +8,7 @@
         android:id="@+id/grocery_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/fab_accent_color"
+        android:background="@color/soft_cream"
         android:padding="8dp"
         android:clipToPadding="false"
         android:layout_marginBottom="80dp"
@@ -22,7 +22,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="100dp"
         android:src="@drawable/ic_message"
-        app:backgroundTint="@color/holo_blue_light"
+        app:backgroundTint="@color/buttons"
         app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior" />
 
 

@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
+    android:background="@color/card_color"
     tools:context="Fragments.EditRecipeFragment">
 
     <LinearLayout
@@ -54,6 +55,7 @@
             android:id="@+id/button_add_ingredient"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/buttons"
             android:text="Add Ingredient"
             android:layout_marginBottom="16dp" />
 
@@ -94,6 +96,7 @@
             android:id="@+id/button_add_photo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/buttons"
             android:text="Add/Change Photo"
             android:layout_marginBottom="24dp" />
 
@@ -101,8 +104,8 @@
             android:id="@+id/button_update_recipe"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/buttons"
             android:text="Update Recipe"
-            android:backgroundTint="@color/design_default_color_primary"
             android:textColor="@android:color/white"
             android:layout_marginBottom="16dp" />
 
