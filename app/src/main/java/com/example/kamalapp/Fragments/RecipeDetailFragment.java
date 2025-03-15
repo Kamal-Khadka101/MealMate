@@ -1,165 +1,204 @@
-// Fragments/RecipeDetailFragment.java
 package com.example.kamalapp.Fragments;
 
 import android.app.AlertDialog;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Pair;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
+import com.example.kamalapp.R;
 import com.example.kamalapp.data.Meal;
 import com.example.kamalapp.data.GroceryItem;
 import com.example.kamalapp.Models.MealViewModel;
 import com.example.kamalapp.Models.GroceryViewModel;
-import com.example.kamalapp.R;
 
-import java.io.File;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 public class RecipeDetailFragment extends Fragment {
 
-    private static final String ARG_RECIPE_ID = "recipe_id";
+    private static final String ARG_MEAL_ID = "meal_id";
+    private int mealId;
     private MealViewModel mealViewModel;
     private GroceryViewModel groceryViewModel;
+    private TextView nameTextView;
+    private TextView ingredientsTextView;
+    private TextView instructionsTextView;
+    private ImageView mealImageView;
+    private Button editButton;
+    private Button deleteButton;
+    private Button addToGroceryButton;
     private Meal currentMeal;
-    private ImageView recipeImageView;
-    private TextView nameTextView, ingredientsTextView, instructionsTextView;
 
-    public static RecipeDetailFragment newInstance(int recipeId) {
+    public static RecipeDetailFragment newInstance(int mealId) {
         RecipeDetailFragment fragment = new RecipeDetailFragment();
         Bundle args = new Bundle();
-        args.putInt(ARG_RECIPE_ID, recipeId);
+        args.putInt(ARG_MEAL_ID, mealId);
         fragment.setArguments(args);
         return fragment;
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
+        if (getArguments() != null) {
+            mealId = getArguments().getInt(ARG_MEAL_ID);
+        }
     }
 
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_recipe_detail, container, false);
 
-        // Initialize UI components
-        recipeImageView = view.findViewById(R.id.detail_recipe_image);
-        nameTextView = view.findViewById(R.id.detail_recipe_name);
-        ingredientsTextView = view.findViewById(R.id.detail_recipe_ingredients);
-        instructionsTextView = view.findViewById(R.id.detail_recipe_instructions);
+        // Initialize views
+        nameTextView = view.findViewById(R.id.text_recipe_name);
+        ingredientsTextView = view.findViewById(R.id.text_ingredients);
+        instructionsTextView = view.findViewById(R.id.text_instructions);
+        mealImageView = view.findViewById(R.id.image_recipe);
+        editButton = view.findViewById(R.id.button_edit);
+        deleteButton = view.findViewById(R.id.button_delete);
+        addToGroceryButton = view.findViewById(R.id.button_add_to_grocery);
 
-        // Add action buttons
-        Button editButton = view.findViewById(R.id.button_edit);
-        Button addToGroceryButton = view.findViewById(R.id.button_add_to_grocery);
-        Button deleteButton = view.findViewById(R.id.button_delete);
+        // Set up view models
+        mealViewModel = new ViewModelProvider(this).get(MealViewModel.class);
+        groceryViewModel = new ViewModelProvider(this).get(GroceryViewModel.class);
 
-        editButton.setOnClickListener(v -> {
-            showEditDialog();
+        // Observe meal data
+        mealViewModel.getMealById(mealId).observe(getViewLifecycleOwner(), meal -> {
+            if (meal != null) {
+                currentMeal = meal;
+                displayMealDetails(meal);
+            }
         });
 
-        addToGroceryButton.setOnClickListener(v -> {
-            addToGroceryList();
-        });
-
-        deleteButton.setOnClickListener(v -> {
-            confirmAndDeleteRecipe();
-        });
+        // Set up buttons
+        editButton.setOnClickListener(v -> editRecipe());
+        deleteButton.setOnClickListener(v -> deleteRecipe());
+        addToGroceryButton.setOnClickListener(v -> addToGroceryList());
 
         return view;
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        // Initialize ViewModels
-        mealViewModel = new ViewModelProvider(requireActivity()).get(MealViewModel.class);
-        groceryViewModel = new ViewModelProvider(requireActivity()).get(GroceryViewModel.class);
-
-        // Get recipe ID from arguments
-        int recipeId = getArguments().getInt(ARG_RECIPE_ID);
-
-        // Observe recipe data
-        mealViewModel.getMealById(recipeId).observe(getViewLifecycleOwner(), meal -> {
-            if (meal != null) {
-                currentMeal = meal;
-                populateUI(meal);
-            }
-        });
-    }
-
-    private void populateUI(Meal meal) {
+    private void displayMealDetails(Meal meal) {
         nameTextView.setText(meal.getName());
-        ingredientsTextView.setText(meal.getIngredients());
+
+        // Display categorized ingredients
+        List<Pair<String, String>> categorizedIngredients = meal.getCategorizedIngredients();
+
+        if (!categorizedIngredients.isEmpty()) {
+            // Group ingredients by category
+            Map<String, List<String>> ingredientsByCategory = new LinkedHashMap<>();
+
+            for (Pair<String, String> ingredient : categorizedIngredients) {
+                String category = ingredient.first;
+                String name = ingredient.second;
+
+                if (category.isEmpty()) {
+                    category = "Other"; // For old format data
+                }
+
+                if (!ingredientsByCategory.containsKey(category)) {
+                    ingredientsByCategory.put(category, new ArrayList<>());
+                }
+
+                ingredientsByCategory.get(category).add(name);
+            }
+
+            // Build formatted text
+            StringBuilder sb = new StringBuilder();
+
+            for (Map.Entry<String, List<String>> entry : ingredientsByCategory.entrySet()) {
+                // Add category header
+                sb.append(entry.getKey()).append(":\n");
+
+                // Add all ingredients in this category
+                for (String ingredient : entry.getValue()) {
+                    sb.append("• ").append(ingredient).append("\n");
+                }
+
+                sb.append("\n");
+            }
+
+            ingredientsTextView.setText(sb.toString());
+        } else {
+            ingredientsTextView.setText("No ingredients listed");
+        }
+
         instructionsTextView.setText(meal.getInstructions());
 
-        // Load image with Glide
-        Glide.with(this)
-                .load(Uri.parse(meal.getImagePath()))
-                .centerCrop()
-                .into(recipeImageView);
+        // Load image if available
+        if (meal.getImagePath() != null && !meal.getImagePath().isEmpty()) {
+            try {
+                Uri imageUri = Uri.parse(meal.getImagePath());
+                Glide.with(requireContext())
+                        .load(imageUri)
+                        .centerCrop()
+                        .into(mealImageView);
+            } catch (Exception e) {
+                mealImageView.setImageResource(R.drawable.ic_placeholder);
+            }
+        } else {
+            mealImageView.setImageResource(R.drawable.ic_placeholder);
+        }
     }
 
-    private void showEditDialog() {
-        // Create dialog layout
-        LayoutInflater inflater = requireActivity().getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.dialog_edit_recipe, null);
+    private void editRecipe() {
+        // Navigate to edit fragment
+        com.example.kamalapp.Fragments.EditRecipeFragment editFragment = EditRecipeFragment.newInstance(mealId);
+        requireActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, editFragment)
+                .addToBackStack(null)
+                .commit();
+    }
 
-        // Get references to EditText fields
-        EditText nameEditText = dialogView.findViewById(R.id.edit_recipe_name);
-        EditText ingredientsEditText = dialogView.findViewById(R.id.edit_recipe_ingredients);
-        EditText instructionsEditText = dialogView.findViewById(R.id.edit_recipe_instructions);
-
-        // Pre-fill with current meal data
-        nameEditText.setText(currentMeal.getName());
-        ingredientsEditText.setText(currentMeal.getIngredients());
-        instructionsEditText.setText(currentMeal.getInstructions());
-
-        // Create and show the dialog
+    private void deleteRecipe() {
+        // Show confirmation dialog
         new AlertDialog.Builder(requireContext())
-                .setTitle("Edit Recipe")
-                .setView(dialogView)
-                .setPositiveButton("Save", (dialog, which) -> {
-                    // Update the meal with new values
-                    currentMeal.setName(nameEditText.getText().toString());
-                    currentMeal.setIngredients(ingredientsEditText.getText().toString());
-                    currentMeal.setInstructions(instructionsEditText.getText().toString());
-
-                    // Save to database
-                    mealViewModel.update(currentMeal);
-
-                    // Update UI
-                    populateUI(currentMeal);
-
-                    Toast.makeText(getContext(), "Recipe updated", Toast.LENGTH_SHORT).show();
+                .setTitle("Delete Recipe")
+                .setMessage("Are you sure you want to delete this recipe?")
+                .setPositiveButton("Delete", (dialog, which) -> {
+                    mealViewModel.delete(currentMeal);
+                    requireActivity().getSupportFragmentManager().popBackStack();
                 })
                 .setNegativeButton("Cancel", null)
-                .create()
                 .show();
     }
 
     private void addToGroceryList() {
+        // First, get a simple string representation of the ingredients
+        String ingredientsText = "";
+
+        // If using categorized ingredients, we need to extract just the ingredient names
+        List<Pair<String, String>> categorizedIngredients = currentMeal.getCategorizedIngredients();
+        if (!categorizedIngredients.isEmpty()) {
+            StringBuilder sb = new StringBuilder();
+            for (Pair<String, String> ingredient : categorizedIngredients) {
+                sb.append(ingredient.second).append("\n");
+            }
+            ingredientsText = sb.toString().trim();
+        } else {
+            // Fallback if no categorized ingredients (shouldn't happen but just in case)
+            ingredientsText = ingredientsTextView.getText().toString();
+        }
+
         // Create a new GroceryItem from the current meal
         GroceryItem groceryItem = new GroceryItem(
                 currentMeal.getId(),
                 currentMeal.getName(),
-                currentMeal.getIngredients(),
+                ingredientsText,
                 false // Not purchased by default
         );
 
@@ -167,53 +206,5 @@ public class RecipeDetailFragment extends Fragment {
         groceryViewModel.insert(groceryItem);
 
         Toast.makeText(getContext(), "Added to grocery list", Toast.LENGTH_SHORT).show();
-
-        // Optionally navigate to grocery list fragment
-        // requireActivity().getSupportFragmentManager().beginTransaction()
-        //     .replace(R.id.fragment_container, new GroceryListFragment())
-        //     .addToBackStack(null)
-        //     .commit();
-    }
-
-    private void confirmAndDeleteRecipe() {
-        new AlertDialog.Builder(requireContext())
-                .setTitle("Delete Recipe")
-                .setMessage("Are you sure you want to delete this recipe?")
-                .setPositiveButton("Delete", (dialog, which) -> {
-                    // Delete image file if it exists and is stored locally
-                    if (currentMeal.getImagePath() != null && !currentMeal.getImagePath().isEmpty()) {
-                        try {
-                            // Only delete if it's a file URI, not a content or resource URI
-                            Uri imageUri = Uri.parse(currentMeal.getImagePath());
-                            if (imageUri.getScheme() != null && imageUri.getScheme().equals("file")) {
-                                File imageFile = new File(imageUri.getPath());
-                                if (imageFile.exists()) {
-                                    imageFile.delete();
-                                }
-                            }
-                        } catch (Exception e) {
-                            // Log but don't interrupt deletion process
-                            e.printStackTrace();
-                        }
-                    }
-
-                    // Delete the meal
-                    mealViewModel.delete(currentMeal);
-
-                    // Display a confirmation message
-                    Toast.makeText(getContext(), "Recipe deleted", Toast.LENGTH_SHORT).show();
-
-                    // Navigate back
-                    requireActivity().onBackPressed();
-                })
-                .setNegativeButton("Cancel", null)
-                .create()
-                .show();
-    }
-
-    @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        // We're not inflating the menu_recipe_detail.xml anymore as requested
-        super.onCreateOptionsMenu(menu, inflater);
     }
 }

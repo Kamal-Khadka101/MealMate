@@ -46,6 +46,7 @@ dependencies {
     implementation libs.firebase.auth
     implementation libs.firebase.firestore
     implementation libs.recyclerview
+    implementation libs.adapters
     testImplementation libs.junit
     androidTestImplementation libs.junit.v121
     androidTestImplementation libs.espresso.core.v361

@@ -19,7 +19,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
 
-    private TextView mMealPlanSummary;
+
     private BottomNavigationView bottomNavigationView;
 
     @Override
@@ -27,11 +27,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mMealPlanSummary = findViewById(R.id.meal_plan_summary);
         bottomNavigationView = findViewById(R.id.bottom_navigation);
-
-        // Set a summary for the week's meal plan (this can be dynamic based on user data)
-        mMealPlanSummary.setText("This week's meal plan: Chicken Stir-Fry, Vegetable Quinoa Bowl, Spaghetti Carbonara");
 
         // Load the Home fragment by default
         loadFragment(new HomeFragment());

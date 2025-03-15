@@ -3,5 +3,6 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="holo_blue_light">#33b5e5</color>
+    <color name="danger_red">#F32013</color>
     <color name="fab_accent_color">#FF7043</color> <!-- Vibrant Coral -->
 </resources>

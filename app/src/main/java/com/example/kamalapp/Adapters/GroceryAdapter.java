@@ -77,11 +77,11 @@ public class GroceryAdapter extends RecyclerView.Adapter<GroceryAdapter.GroceryV
             if (groceryItem.isPurchased()) {
                 nameTextView.setPaintFlags(nameTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                 ingredientsTextView.setPaintFlags(ingredientsTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                purchaseButton.setText("Mark Unpurchased");
+                purchaseButton.setText("Unpurchased");
             } else {
                 nameTextView.setPaintFlags(nameTextView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
                 ingredientsTextView.setPaintFlags(ingredientsTextView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
-                purchaseButton.setText("Mark Purchased");
+                purchaseButton.setText("Purchased");
             }
 
             purchaseButton.setOnClickListener(v -> {
