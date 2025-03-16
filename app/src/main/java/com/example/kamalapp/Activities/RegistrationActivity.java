@@ -1,4 +1,5 @@
 package com.example.kamalapp.Activities;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -39,6 +40,7 @@ public class RegistrationActivity extends AppCompatActivity {
 //    }
 
     FirebaseAuth mAuth;
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,7 +52,7 @@ public class RegistrationActivity extends AppCompatActivity {
         mPasswordView = findViewById(R.id.password);
         mConfirmPasswordView = findViewById(R.id.confirm_password);
         mRegisterButton = findViewById(R.id.register_button);
-        textview=findViewById(R.id.loginNow);
+        textview=findViewById(R.id.login_link);
 
         textview.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
@@ -114,38 +116,32 @@ public class RegistrationActivity extends AppCompatActivity {
             focusView = mConfirmPasswordView;
             cancel = true;
         }
-        mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener( new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-
-                            Toast.makeText(RegistrationActivity.this, "Account Created.",
-                                    Toast.LENGTH_SHORT).show();
-                            Intent intent= new Intent(getApplicationContext(),LoginActivity.class );
-                            startActivity(intent);
-                            finish();
-                        } else {
-                            // If sign in fails, display a message to the user.
-
-                            Toast.makeText(RegistrationActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-
-                        }
-                    }
-                });
 
         if (cancel) {
             // There was an error; don't attempt registration and focus the first form field with an error.
             focusView.requestFocus();
         } else {
-            // Perform registration (this is just a placeholder; implement your registration logic)
-            Toast.makeText(this, "New user has been created", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(RegistrationActivity.this, LoginActivity.class);
-            startActivity(intent);
-            finish(); // Close the Registration Activity
+            // Proceed only if validation passes
+            mAuth.createUserWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(RegistrationActivity.this, "Account Created.",
+                                        Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                                startActivity(intent);
+                                finish();
+                            } else {
+                                // If sign-in fails, display a message to the user.
+                                Toast.makeText(RegistrationActivity.this, "Authentication failed.",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
         }
     }
+
 
     private boolean isEmailValid(String email) {
         return email.contains("@");
