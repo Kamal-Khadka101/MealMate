@@ -24,4 +24,17 @@
     <string name="from_gallery">Gallery</string>
     <string name="button_background">Button Background</string>
     <string name="delegationa">SEND SMS</string>
+
+
+    <string name="app_logo">MealMate Logo</string>
+    <string name="greeting_text">Hey there, Mate!</string>
+    <string name="welcome_message">Welcome to MealMate, your personal assistant for meal planning and grocery shopping. Let us help you save time and eat healthier!</string>
+    <string name="features_title">What you can do with MealMate:</string>
+    <string name="feature_1">Plan your meals for the entire week</string>
+    <string name="feature_2">Generate shopping lists automatically</string>
+    <string name="feature_3">Share tasks with family and friends</string>
+    <string name="feature_4">Find the best prices at your local stores</string>
+    <string name="get_started_prompt">Ready to simplify your meal planning?</string>
+    <string name="get_started">Get Started</string>
+
 </resources>
