@@ -9,4 +9,6 @@
     <color name="buttons">#ffb497</color>
     <color name="green_card">#d0e5d8</color>
     <color name="fab_accent_color">#FF7043</color> <!-- Vibrant Coral -->
+    <color name="grocery_green">#4CAF50</color> <!-- Green for adding to grocery list -->
+    <color name="delete_red">#F44336</color> <!-- Red for delete action -->
 </resources>

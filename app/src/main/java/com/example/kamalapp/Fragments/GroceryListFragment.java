@@ -2,8 +2,13 @@
 package com.example.kamalapp.Fragments;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Pair;
@@ -33,9 +38,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class GroceryListFragment extends Fragment implements GroceryAdapter.OnGroceryItemClickListener {
+public class GroceryListFragment extends Fragment implements GroceryAdapter.OnGroceryItemClickListener, SensorEventListener {
 
     private static final int SMS_PERMISSION_REQUEST_CODE = 101;
+    
+    // Shake detection constants
+    private static final float SHAKE_THRESHOLD = 12.0f; // Threshold for shake detection
+    private static final int MIN_TIME_BETWEEN_SHAKES = 1000; // Minimum time between shakes in ms
 
     private GroceryViewModel groceryViewModel;
     private RecyclerView recyclerView;
@@ -43,6 +52,14 @@ public class GroceryListFragment extends Fragment implements GroceryAdapter.OnGr
     private TextView emptyView;
     private FloatingActionButton sendSmsFab;
     private List<GroceryItem> currentGroceryItems = new ArrayList<>();
+    
+    // Shake detection variables
+    private SensorManager sensorManager;
+    private Sensor accelerometer;
+    private long lastShakeTime = 0;
+    private float lastX = 0;
+    private float lastY = 0;
+    private float lastZ = 0;
 
     @Nullable
     @Override
@@ -60,6 +77,12 @@ public class GroceryListFragment extends Fragment implements GroceryAdapter.OnGr
 
         // Setup FAB click listener
         sendSmsFab.setOnClickListener(v -> checkSmsPermissionAndSend());
+        
+        // Initialize shake detection
+        sensorManager = (SensorManager) requireActivity().getSystemService(Context.SENSOR_SERVICE);
+        if (sensorManager != null) {
+            accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        }
 
         return view;
     }
@@ -95,6 +118,62 @@ public class GroceryListFragment extends Fragment implements GroceryAdapter.OnGr
                 sendSmsFab.setVisibility(View.GONE);
             }
         });
+    }
+    
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Register shake detector when fragment is visible
+        if (sensorManager != null && accelerometer != null) {
+            sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+        }
+    }
+    
+    @Override
+    public void onPause() {
+        super.onPause();
+        // Unregister shake detector when fragment is not visible
+        if (sensorManager != null) {
+            sensorManager.unregisterListener(this);
+        }
+    }
+    
+    // SensorEventListener methods
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+            long currentTime = System.currentTimeMillis();
+            
+            if ((currentTime - lastShakeTime) > MIN_TIME_BETWEEN_SHAKES) {
+                float x = event.values[0];
+                float y = event.values[1];
+                float z = event.values[2];
+                
+                float deltaX = Math.abs(lastX - x);
+                float deltaY = Math.abs(lastY - y);
+                float deltaZ = Math.abs(lastZ - z);
+                
+                // Check if the acceleration change is above the threshold
+                if ((deltaX > SHAKE_THRESHOLD && deltaY > SHAKE_THRESHOLD) 
+                        || (deltaX > SHAKE_THRESHOLD && deltaZ > SHAKE_THRESHOLD) 
+                        || (deltaY > SHAKE_THRESHOLD && deltaZ > SHAKE_THRESHOLD)) {
+                    
+                    // Device was shaken, trigger SMS
+                    lastShakeTime = currentTime;
+                    Toast.makeText(requireContext(), "Shake detected! Preparing SMS...", Toast.LENGTH_SHORT).show();
+                    checkSmsPermissionAndSend();
+                }
+                
+                lastX = x;
+                lastY = y;
+                lastZ = z;
+            }
+        }
+    }
+    
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+        // Not needed for this implementation
     }
 
     @Override
