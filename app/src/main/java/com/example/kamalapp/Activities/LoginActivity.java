@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.kamalapp.R;
+import com.example.kamalapp.utils.SessionManager;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -26,26 +27,38 @@ public class LoginActivity extends AppCompatActivity {
     private Button mLoginButton;
     private TextView mRegisterLink;
     private FirebaseAuth mAuth;
+    private SessionManager sessionManager;
 
-//    @Override
-//    public void onStart() {
-//        super.onStart();
-//        // Check if user is signed in (non-null) and update UI accordingly.
-//        FirebaseUser currentUser = mAuth.getCurrentUser();
-//        if (currentUser != null) {
-//            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-//            startActivity(intent);
-//            finish();
-//        }
-//    }
+    @Override
+    public void onStart() {
+        super.onStart();
+        
+        // Initialize Session Manager
+        sessionManager = new SessionManager(this);
+        
+        // Initialize Firebase Auth
+        mAuth = FirebaseAuth.getInstance();
+        
+        // Check if user is already logged in
+        if (sessionManager.isLoggedIn()) {
+            FirebaseUser currentUser = mAuth.getCurrentUser();
+            
+            if (currentUser != null) {
+                // User is logged in and Firebase auth is valid
+                navigateToMainActivity();
+            } else {
+                // Session shows logged in but Firebase auth is missing
+                // This could happen if Firebase auth expired or was invalidated
+                sessionManager.logoutUser();
+                Toast.makeText(this, "Session expired. Please login again.", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
-        // Initialize Firebase Auth
-        mAuth = FirebaseAuth.getInstance();
 
         // Initialize UI elements
         mEmailView = findViewById(R.id.email);
@@ -110,25 +123,49 @@ public class LoginActivity extends AppCompatActivity {
             // There was an error; don't attempt login and focus the first form field with an error
             focusView.requestFocus();
         } else {
+            // Show a progress indicator and start the login process
+            showProgress(true);
 
             // Perform login
             mAuth.signInWithEmailAndPassword(email, password)
                     .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
+                            showProgress(false);
+                            
                             if (task.isSuccessful()) {
-                                // Sign in success, update UI with the signed-in user's information
-                                Toast.makeText(LoginActivity.this, "Login successful.", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                                startActivity(intent);
-                                finish();
+                                // Sign in success
+                                FirebaseUser user = mAuth.getCurrentUser();
+                                if (user != null) {
+                                    // Create session
+                                    sessionManager.createLoginSession(user.getEmail(), user.getUid());
+                                    
+                                    // Navigate to main activity
+                                    Toast.makeText(LoginActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
+                                    navigateToMainActivity();
+                                }
                             } else {
                                 // If sign in fails, display a message to the user
-                                Toast.makeText(LoginActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                                String errorMessage = "Authentication failed";
+                                if (task.getException() != null) {
+                                    errorMessage += ": " + task.getException().getMessage();
+                                }
+                                Toast.makeText(LoginActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
         }
+    }
+    
+    private void showProgress(boolean show) {
+        // You can implement a progress indicator here if needed
+    }
+    
+    private void navigateToMainActivity() {
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
     }
 
     private boolean isEmailValid(String email) {

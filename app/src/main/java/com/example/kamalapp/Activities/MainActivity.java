@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import com.example.kamalapp.Fragments.GroceryListFragment;
 import com.example.kamalapp.Fragments.HomeFragment;
 import com.example.kamalapp.Fragments.MealPlanningFragment;
+import com.example.kamalapp.Fragments.ProfileFragment;
 import com.example.kamalapp.Fragments.RecipeBrowsingFragment;
 import com.example.kamalapp.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -46,12 +47,8 @@ public class MainActivity extends AppCompatActivity {
                     selectedFragment = new GroceryListFragment();
                 } else if (itemId == R.id.nav_recipes) {
                     selectedFragment = new RecipeBrowsingFragment();
-                } else if (itemId == R.id.nav_logout) {// Handle logout
-                    Toast.makeText(MainActivity.this, "Logging Out", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                    startActivity(intent);
-                    finish(); // Close the Main Activity
-                    return true;
+                } else if (itemId == R.id.nav_profile) {
+                    selectedFragment = new ProfileFragment();
                 }
                 return loadFragment(selectedFragment);
             }

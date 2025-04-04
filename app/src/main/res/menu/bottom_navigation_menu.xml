@@ -17,7 +17,7 @@
         android:title="Recipes"
         android:icon="@drawable/ic_recipies" />
     <item
-        android:id="@+id/nav_logout"
-        android:title="Logout"
-        android:icon="@drawable/ic_logout" />
+        android:id="@+id/nav_profile"
+        android:title="Profile"
+        android:icon="@drawable/ic_profile" />
 </menu>

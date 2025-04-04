@@ -25,7 +25,7 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.In
     private RecyclerView recyclerView;
 
     private static final String[] CATEGORIES = {
-            "Fruits/Vegetables", "Proteins/Diary", "Grains/Spices",
+            "Fruits/Vegetables", "Proteins/Dairy", "Grains/Spices",
             "Frozen/Packed Foods", "Beverages/Extra"
     };
 
